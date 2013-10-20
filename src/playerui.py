@@ -5,16 +5,17 @@ Created on Sat Sep 29 22:43:28 2012
 @author: lusaisai
 """
 
-
-from PyQt4 import QtCore, QtGui
-import sys
 import os
 import pickle
+
+from PyQt4 import QtCore, QtGui
+
 import audio
 import video
 import mainwindow
 import configwindow
 import musicupd
+
 
 APP_DIR = os.path.join( os.path.realpath(__file__), '..', '..' )
 DATA_DIR = os.path.join( APP_DIR, 'data' )
@@ -121,9 +122,4 @@ class MyUI(QtGui.QMainWindow):
         m.db_upd()
         self.ui.statusbar.showMessage("Completed!")
 
-app = QtGui.QApplication(sys.argv)
-app.setWindowIcon( QtGui.QIcon( os.path.join( DATA_DIR, 'app.ico' ) ) )
-myui = MyUI()
-myui.show()
-app.exec_()
 
