@@ -16,17 +16,16 @@ import mainwindow
 import configwindow
 import musicupd
 
-
+APP_DIR = os.path.join( os.path.realpath(__file__), '..', '..' )
+DATA_DIR = os.path.join( APP_DIR, 'data' )
+CFG_FILE = os.path.join( DATA_DIR, 'app.cfg' )
+DB_FILE = os.path.join( DATA_DIR, 'musics.db' )
 
 class ConfigUI(QtGui.QDialog):
     """
     This is a pop-up config window to setup the music and video players and directories
     """
     def __init__(self, parent=None):
-        self.app_dir = os.path.join( os.path.realpath(__file__), '..', '..' )
-        self.data_dir = os.path.join( self.app_dir, 'data' )
-        self.cfg_file = os.path.join( self.data_dir, 'app.cfg' )
-
         super(ConfigUI, self).__init__(parent)
         self.ui = configwindow.Ui_Dialog()
         self.ui.setupUi(self)
@@ -41,7 +40,7 @@ class ConfigUI(QtGui.QDialog):
     def load_cfg(self):
         configs = { 'music_player': '', 'music_dir': '', 'video_player': '', 'video_dir': '' }
         try:
-            file_configs = pickle.load( open( self.cfg_file, "rb" ) )
+            file_configs = pickle.load( open( CFG_FILE, "rb" ) )
             configs.update(file_configs)
         except IOError:
             pass
@@ -57,7 +56,7 @@ class ConfigUI(QtGui.QDialog):
                         video_player=self.ui.video_player.text(),
                         video_dir=self.ui.video_dir.text()
                       )
-        pickle.dump( configs, open( self.cfg_file, "wb" ) )
+        pickle.dump( configs, open( CFG_FILE, "wb" ) )
 
     def set_music_player(self):
         player = QtGui.QFileDialog.getOpenFileName()
@@ -82,14 +81,10 @@ class MyUI(QtGui.QMainWindow):
 
     def __init__(self, parent=None):
         super(MyUI, self).__init__(parent)
-        self.app_dir = os.path.join( os.path.realpath(__file__), '..', '..' )
-        self.data_dir = os.path.join( self.app_dir, 'data' )
-        self.cfg_file = os.path.join( self.data_dir, 'app.cfg' )
-        self.db_file = os.path.join( self.data_dir, 'musics.db' )
-
-
         self.ui = mainwindow.Ui_MainWindow()
         self.ui.setupUi(self)
+        self.ui.actionConfig.setIcon( QtGui.QIcon( os.path.join( DATA_DIR, 'settings.ico' ) ) )
+        self.ui.action_db_update.setIcon( QtGui.QIcon( os.path.join( DATA_DIR, 'db.ico' ) ) )
         self.connect(self.ui.songPlay, QtCore.SIGNAL("clicked()"), self.call_audio)
         self.connect(self.ui.videoPlay, QtCore.SIGNAL("clicked()"), self.call_video)
         self.connect(self.ui.actionConfig, QtCore.SIGNAL("triggered()"), self.call_config)
@@ -97,7 +92,7 @@ class MyUI(QtGui.QMainWindow):
 
     def read_cfg(self):
         try:
-            return pickle.load( open( self.cfg_file, "rb" ) )
+            return pickle.load( open( CFG_FILE, "rb" ) )
         except IOError:
             return {}
 
@@ -108,25 +103,26 @@ class MyUI(QtGui.QMainWindow):
 
     def call_audio(self):
         configs = self.read_cfg()
-        music_player = audio.RandomAudioPlay(self.db_file, configs['music_player'])
+        music_player = audio.RandomAudioPlay(DB_FILE, configs['music_player'])
         music_player.song_num = int(self.ui.songNum.text())
         music_player.search_pattern = self.ui.songPattern.text().split(" ")
         music_player.set_query().get_songs().play()
     
     def call_video(self):
         configs = self.read_cfg()
-        video_player = video.RandomVideoPlay(configs['video_dir'], self.data_dir, configs['video_player'])
+        video_player = video.RandomVideoPlay(configs['video_dir'], DATA_DIR, configs['video_player'])
         video_player.get_videos().play()
         self.ui.statusbar.showMessage("Now playing %s ..." % video_player.current_video)
 
     def call_db_upd(self):
         configs = self.read_cfg()
         self.ui.statusbar.showMessage("Updating Music Database ...")
-        m = musicupd.MusicDBUpd(self.data_dir, configs['music_dir'])
+        m = musicupd.MusicDBUpd(DATA_DIR, configs['music_dir'])
         m.db_upd()
         self.ui.statusbar.showMessage("Completed!")
 
 app = QtGui.QApplication(sys.argv)
+app.setWindowIcon( QtGui.QIcon( os.path.join( DATA_DIR, 'app.ico' ) ) )
 myui = MyUI()
 myui.show()
 app.exec_()
