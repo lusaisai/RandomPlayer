@@ -42,7 +42,7 @@ class RandomVideoPlay(object):
     def read_stats(self):
         try:
             stat = pickle.load( open( self.stats, "rb" ) )
-            self.all_videos.update( stat )
+            self.all_videos[self.video_dir].update( stat[self.video_dir] )
         except IOError:
             pass
 
