@@ -42,13 +42,17 @@ class RandomVideoPlay(object):
     def read_stats(self):
         try:
             stat = pickle.load( open( self.stats, "rb" ) )
-            self.all_videos[self.video_dir].update( stat[self.video_dir] )
+            if hasattr( self.all_videos, self.video_dir ):
+                self.all_videos[self.video_dir].update( stat[self.video_dir] )
+
         except IOError:
             pass
 
     def save_stats(self):
         try:
-            pickle.dump( self.all_videos, open( self.stats, "wb" ) )
+            stat = pickle.load( open( self.stats, "rb" ) )
+            stat.update( self.all_videos )
+            pickle.dump( stat, open( self.stats, "wb" ) )
         except IOError:
             pass
 
