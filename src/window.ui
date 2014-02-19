@@ -73,6 +73,12 @@
         <property name="text">
          <string>Play</string>
         </property>
+        <property name="autoDefault">
+         <bool>true</bool>
+        </property>
+        <property name="default">
+         <bool>true</bool>
+        </property>
        </widget>
       </item>
       <item row="1" column="2">
@@ -222,6 +228,9 @@
           </property>
           <property name="text">
            <string>Play</string>
+          </property>
+          <property name="autoDefault">
+           <bool>true</bool>
           </property>
          </widget>
         </item>

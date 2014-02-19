@@ -1,3 +1,12 @@
+# -*- coding: utf-8 -*-
+
+# Form implementation generated from reading ui file 'window.ui'
+#
+# Created: Thu Feb 20 01:09:11 2014
+#      by: PyQt4 UI code generator 4.10.3
+#
+# WARNING! All changes made in this file will be lost!
+
 from PyQt4 import QtCore, QtGui
 
 try:
@@ -35,6 +44,8 @@ class Ui_MainWindow(object):
         self.gridLayout.addItem(spacerItem1, 1, 0, 1, 1)
         self.videoPlay = QtGui.QPushButton(self.layoutWidget)
         self.videoPlay.setMinimumSize(QtCore.QSize(80, 80))
+        self.videoPlay.setAutoDefault(True)
+        self.videoPlay.setDefault(True)
         self.videoPlay.setObjectName(_fromUtf8("videoPlay"))
         self.gridLayout.addWidget(self.videoPlay, 1, 1, 1, 1)
         spacerItem2 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
@@ -85,6 +96,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_2.addItem(spacerItem6)
         self.songPlay = QtGui.QPushButton(self.layoutWidget1)
         self.songPlay.setMinimumSize(QtCore.QSize(80, 50))
+        self.songPlay.setAutoDefault(True)
         self.songPlay.setObjectName(_fromUtf8("songPlay"))
         self.horizontalLayout_2.addWidget(self.songPlay)
         spacerItem7 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
